@@ -34,7 +34,9 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		add_action( 'admin_menu', array( $this, 'add_menu_pages') );
 		add_action( 'after_setup_theme', array( $this, 'knawat_setup_wizard' ) );
 		add_filter( 'views_edit-product', array( $this, 'knawat_dropshipwc_add_new_product_filter' ) );
+		add_filter( 'views_edit-shop_order', array( $this, 'knawat_dropshipwc_add_new_order_filter' ) );
 		add_action( 'load-edit.php', array( $this, 'knawat_dropshipwc_load_custom_knawat_filter' ) );
+		add_action( 'load-edit.php', array( $this, 'knawat_dropshipwc_load_custom_knawat_order_filter' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_dropshipping_woocommerce_credit' ) );
 	}
 
@@ -97,7 +99,86 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 	}
 
 	/**
-	 * Add Knawat Products Filter view at filters
+	 * Add Knawat Orders Filter view at filters
+	 *
+	 * @since 1.0
+	 * @param  array $views Array of filter views
+	 * @return array $views Array of filter views
+	 */
+	function knawat_dropshipwc_add_new_order_filter( $views ){
+
+		global $wpdb;
+
+		$t_order_items = $wpdb->prefix . "woocommerce_order_items";
+		$t_order_itemmeta = $wpdb->prefix . "woocommerce_order_itemmeta";
+
+		$count_query = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as count FROM {$wpdb->posts} WHERE 1=1 AND {$wpdb->posts}.post_type = 'shop_order' AND {$wpdb->posts}.ID IN (
+				SELECT DISTINCT order_id from {$t_order_items} AS oi
+				INNER JOIN {$t_order_itemmeta} as oim ON oi.order_item_id = oim.order_item_id
+				WHERE oi.order_item_type = 'line_item'
+				AND oim.meta_key = '_product_id'
+				AND oim.meta_value IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='dropshipping' AND meta_value='knawat' )
+			)";
+
+		$count = $wpdb->get_var( $count_query );
+
+		if( $count > 0 ){
+			$class = '';
+			if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) ){
+				$class = 'current';
+			}
+
+			$views_html = sprintf( "<a class='%s' href='edit.php?post_type=shop_order&knawat_orders=1'>%s</a><span class='count'>(%d)</span>", $class, __('Knawat Orders', 'dropshipping-woocommerce' ), $count );
+			$views['knawat'] = $views_html;
+		}
+		return $views;
+	}
+
+	/**
+	 * Add `posts_where` filter if knawat orders need to filter
+	 *
+	 * @since 1.0
+	 * @return void
+	 */
+	function knawat_dropshipwc_load_custom_knawat_order_filter(){
+	    global $typenow;
+	    if( 'shop_order' != $typenow ){
+	        return;
+	    }
+
+	    if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) && trim( $_GET[ 'knawat_orders' ] ) == 1 ){
+			add_filter( 'posts_where' , array( $this, 'knawat_dropshipwc_posts_where_knawat_orders') );
+	    }
+	}
+
+	/**
+	 * Add condtion in WHERE statement for filter only knawat orders in orders list table
+	 *
+	 * @since  1.0
+	 * @param  string $where Where condition of SQL statement for orders query
+	 * @return string $where Modified Where condition of SQL statement for orders query
+	 */
+	function knawat_dropshipwc_posts_where_knawat_orders( $where ){
+	    global $wpdb;
+
+	    $t_order_items = $wpdb->prefix . "woocommerce_order_items";
+		$t_order_itemmeta = $wpdb->prefix . "woocommerce_order_itemmeta";
+
+	    if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) && trim( $_GET[ 'knawat_orders' ] ) == 1 ){
+	        $where .= " AND ID IN (
+	        	SELECT DISTINCT order_id from {$t_order_items} AS oi
+				INNER JOIN {$t_order_itemmeta} as oim ON oi.order_item_id = oim.order_item_id
+				WHERE oi.order_item_type = 'line_item' 
+				AND oim.meta_key = '_product_id'
+				AND oim.meta_value IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='dropshipping' AND meta_value='knawat' )
+	        )";
+	    }
+	    return $where;	
+	}
+
+
+	/**
+	 * Add Knawat Product Filter view at filters
 	 *
 	 * @since 1.0
 	 * @param  array $views Array of filter views
@@ -107,7 +188,7 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 
 		global $wpdb;
 
-		$count = $wpdb->query( "SELECT COUNT( DISTINCT p.ID) as count FROM {$wpdb->posts} as p INNER JOIN {$wpdb->postmeta} as pm ON ( p.ID = pm.post_id ) WHERE 1=1 AND ( ( pm.meta_key = 'dropshipping' AND pm.meta_value = 'knawat' ) ) AND p.post_type = 'product' AND ((p.post_status != 'trash') ) GROUP BY p.ID" );
+		$count = $wpdb->query( "SELECT COUNT( DISTINCT p.ID) as count FROM {$wpdb->posts} as p INNER JOIN {$wpdb->postmeta} as pm ON ( p.ID = pm.post_id ) WHERE 1=1 AND ( ( pm.meta_key = 'dropshipping' AND pm.meta_value = 'knawat' ) ) AND p.post_type = 'product' AND ((p.post_status != 'trash') )" );
 
 		if( $count > 0 ){
 			$class = '';
@@ -121,7 +202,7 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		return $views;
 	}
 
-	/**
+	/** 
 	 * Add `posts_where` filter if knawat products need to filter
 	 *
 	 * @since 1.0
@@ -132,6 +213,7 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 	    if( 'product' != $typenow ){
 	        return;
 	    }
+	    
 	    if ( isset( $_GET[ 'knawat_products' ] ) && !empty( $_GET[ 'knawat_products' ] ) && trim( $_GET[ 'knawat_products' ] ) == 1 ){
 	    	add_filter( 'posts_where' , array( $this, 'knawat_dropshipwc_posts_where_knawat_products') );
 	    }
