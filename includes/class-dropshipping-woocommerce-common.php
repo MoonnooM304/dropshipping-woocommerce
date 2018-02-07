@@ -56,3 +56,12 @@ class Knawat_Dropshipping_Woocommerce_Common {
 		}
 	}
 }
+
+/*
+ * Woocommerce WebHooks Utilities
+ */
+add_filter( 'http_request_args', function( $args ) {
+    $args['reject_unsafe_urls'] = false;
+
+    return $args;
+});
