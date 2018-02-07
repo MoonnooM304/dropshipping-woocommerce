@@ -52,6 +52,12 @@ function knawat_dropshipwc_register_required_plugins() {
 		);	
 	}
 	
+	$plugins[] = array(
+			'name'         	=> esc_html__( 'qTranslate X', 'dropshipping-woocommerce' ),
+			'slug'         	=> 'qtranslate-x',
+			'required'     	=> false,
+			'recommended_by'=> 'knawat'
+		);
 	/*
 	 * Array of configuration settings. Amend each line as needed.
 	 *

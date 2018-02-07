@@ -621,9 +621,12 @@ class Knawat_Merlin {
 
 		// Strings passed in from the config file.
 		$strings = $this->strings;
-		$knawat_options = get_option( KNAWAT_DROPWC_OPTIONS, array() );
+		/*$knawat_options = get_option( KNAWAT_DROPWC_OPTIONS, array() );
 		if( isset( $knawat_options['knawat_status'] ) && $knawat_options['knawat_status'] != '' && $knawat_options['knawat_status'] == 'connected' ) {
 			$already_setup = 1;
+		}*/
+		if( knawat_dropshipwc_is_connected() ){
+			$already_setup = 1;	
 		}
 				
 		// Text strings.
@@ -869,7 +872,7 @@ class Knawat_Merlin {
 
 		<footer class="merlin__content__footer merlin__content__footer--fullwidth">
 			
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="merlin__button merlin__button--blue merlin__button--fullwidth merlin__button--popin"><?php echo esc_html( $big_btn ); ?></a>
+			<a href="<?php echo esc_url( 'https://app.knawat.com/autologin' ); ?>" class="merlin__button merlin__button--blue merlin__button--fullwidth merlin__button--popin"><?php echo esc_html( $big_btn ); ?></a>
 			
 			<a id="merlin__drawer-trigger" class="merlin__button merlin__button--knockout"><span><?php echo esc_html( $action ); ?></span><span class="chevron"></span></a>
 			
@@ -877,7 +880,7 @@ class Knawat_Merlin {
 
 				<li><?php echo wp_kses( $link_1, $allowed_html_array ); ?></li>
 				<li><?php echo wp_kses( $link_2, $allowed_html_array ); ?></li>
-				<li><?php echo wp_kses( $link_3, $allowed_html_array ); ?></li>
+				<!-- <li><?php //echo wp_kses( $link_3, $allowed_html_array ); ?></li> -->
 
 			</ul>
 

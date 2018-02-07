@@ -62,10 +62,10 @@ $knawat_setup = new Knawat_Merlin(
 		'ready-header' 			=> esc_html__( 'All done. Have fun!' , 'dropshipping-woocommerce' ),
 		'ready' 				=> esc_html__( 'Your store has been all set up.' , 'dropshipping-woocommerce' ),
 		'ready-action-link' 		=> esc_html__( 'Extras' , 'dropshipping-woocommerce' ),
-		'ready-big-button' 		=> esc_html__( 'View your website' , 'dropshipping-woocommerce' ),
+		'ready-big-button' 		=> esc_html__( 'Start Adding Products' , 'dropshipping-woocommerce' ),
 
-		'ready-link-1'              	=> wp_kses( sprintf( __( '<a href="https://wordpress.org/support/" target="_blank">%s</a>', 'dropshipping-woocommerce' ), 'Explore WordPress' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
-		'ready-link-2'              	=> wp_kses( sprintf( __( '<a href="https://themebeans.com/contact/" target="_blank">%s</a>', 'dropshipping-woocommerce' ), 'Get Theme Support' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+		'ready-link-1'              	=> wp_kses( sprintf( __( '<a href="https://knawat.com/" target="_blank">%s</a>', 'dropshipping-woocommerce' ), 'Explore Knawat' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
+		'ready-link-2'              	=> wp_kses( sprintf( __( '<a href="https://help.knawat.com/hc/en-us/" target="_blank">%s</a>', 'dropshipping-woocommerce' ), 'Help Center' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 		'ready-link-3'             	=> wp_kses( sprintf( __( '<a href="'.admin_url( 'customize.php' ).'" target="_blank">%s</a>', 'dropshipping-woocommerce' ), 'Start Customizing' ), array( 'a' => array( 'href' => array(), 'target' => array() ) ) ),
 	)
 );

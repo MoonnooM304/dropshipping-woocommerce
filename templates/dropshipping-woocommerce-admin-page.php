@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $knawat_options = get_option( KNAWAT_DROPWC_OPTIONS, array() );
 $knawat_connected = 0;
-if( isset( $knawat_options['knawat_status'] ) && $knawat_options['knawat_status'] != '' && $knawat_options['knawat_status'] == 'connected' ) {
+if( knawat_dropshipwc_is_connected() ) {
 	$knawat_connected = 1;
 }
 ?>
@@ -18,7 +18,7 @@ if( isset( $knawat_options['knawat_status'] ) && $knawat_options['knawat_status'
 					</label>
 				</th>
 				<td>
-					<?php if( $knawat_connect ){ ?>
+					<?php if( $knawat_connected ){ ?>
 						<div class="knawat_dropshipwc_connected">
 							<span class="dashicons dashicons-yes" style="background-color: green;color: #fff;border-radius: 50%;padding: 4px 4px 3px 3px;"></span> 
 							<strong style="color: green; font-size: 18px;" > <?php esc_html_e( 'Connected', 'dropshipping-woocommerce' ); ?></strong>
