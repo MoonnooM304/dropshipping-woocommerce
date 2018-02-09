@@ -112,7 +112,9 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		$t_order_items = $wpdb->prefix . "woocommerce_order_items";
 		$t_order_itemmeta = $wpdb->prefix . "woocommerce_order_itemmeta";
 
-		$count_query = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as count FROM {$wpdb->posts} WHERE 1=1 AND {$wpdb->posts}.post_type = 'shop_order' AND {$wpdb->posts}.ID IN (
+		$count_query = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as count FROM {$wpdb->posts} WHERE 1=1 AND {$wpdb->posts}.post_type = 'shop_order'
+			AND ( {$wpdb->posts}.post_status != 'wc-cancelled' AND {$wpdb->posts}.post_status != 'trash' )
+			AND {$wpdb->posts}.ID IN (
 				SELECT DISTINCT order_id from {$t_order_items} AS oi
 				INNER JOIN {$t_order_itemmeta} as oim ON oi.order_item_id = oim.order_item_id
 				WHERE oi.order_item_type = 'line_item'
@@ -165,7 +167,9 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		$t_order_itemmeta = $wpdb->prefix . "woocommerce_order_itemmeta";
 
 	    if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) && trim( $_GET[ 'knawat_orders' ] ) == 1 ){
-	        $where .= " AND ID IN (
+	        $where .= " AND (( {$wpdb->posts}.post_status != 'wc-cancelled'
+				AND {$wpdb->posts}.post_status != 'trash'))
+				AND ID IN (
 	        	SELECT DISTINCT order_id from {$t_order_items} AS oi
 				INNER JOIN {$t_order_itemmeta} as oim ON oi.order_item_id = oim.order_item_id
 				WHERE oi.order_item_type = 'line_item' 
