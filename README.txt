@@ -27,7 +27,7 @@ Knawat WooCommerce DropShipping allows you to Add products to your WooCommerce s
 * No Geological Limits (worldwide shipping)
 * [More features]( https://knawat.com/features/ )
 
-[youtube https://www.youtube.com/watch?v=phVg08W_VrE]
+[youtube https://www.youtube.com/watch?v=MXwKwZ6qJZw]
 
 = Contributing =
 * You can contribute to development of the plugin on [Github][1].
