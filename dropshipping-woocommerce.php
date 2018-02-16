@@ -1,8 +1,8 @@
 <?php
 /**
- * Plugin Name:       Knawat Dropshipping
+ * Plugin Name:       Knawat WooCommerce DropShipping
  * Plugin URI:        https://wordpress.org/plugins/dropshipping-woocommerce/
- * Description:       Knawat Dropshipping Woocommerce.
+ * Description:       Knawat WooCommerce DropShipping
  * Version:           1.0.0
  * Author:            Knawat Team
  * Author URI:        https://github.com/Knawat
