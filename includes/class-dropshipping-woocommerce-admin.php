@@ -191,9 +191,7 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 	function knawat_dropshipwc_add_new_product_filter( $views ){
 
 		global $wpdb;
-
-		$count = $wpdb->query( "SELECT COUNT( DISTINCT p.ID) as count FROM {$wpdb->posts} as p INNER JOIN {$wpdb->postmeta} as pm ON ( p.ID = pm.post_id ) WHERE 1=1 AND ( ( pm.meta_key = 'dropshipping' AND pm.meta_value = 'knawat' ) ) AND p.post_type = 'product' AND ((p.post_status != 'trash') )" );
-
+		$count = $wpdb->get_var( "SELECT COUNT( DISTINCT p.ID) as count FROM {$wpdb->posts} as p INNER JOIN {$wpdb->postmeta} as pm ON ( p.ID = pm.post_id ) WHERE 1=1 AND ( pm.meta_key = 'dropshipping' AND pm.meta_value = 'knawat' ) AND p.post_type = 'product' AND p.post_status != 'trash'" );
 		if( $count > 0 ){
 			$class = '';
 			if ( isset( $_GET[ 'knawat_products' ] ) && !empty( $_GET[ 'knawat_products' ] ) ){
