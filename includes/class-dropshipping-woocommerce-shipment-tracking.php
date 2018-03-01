@@ -21,7 +21,7 @@ class Knawat_Dropshipping_Woocommerce_Shipment_Traking {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'knawat_dropshipwc_register_order_meta' ) );
-		add_action( 'add_meta_boxes', array( $this, 'knawat_dropshipwc_add_meta_box' ) );
+		add_action( 'add_meta_boxes', array( $this, 'knawat_dropshipwc_add_meta_box' ), 10, 2 );
 		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'knawat_dropshipwc_save_tracking_details' ), 0, 2 );
 		add_action( 'woocommerce_view_order', array( $this, 'knawat_dropshipwc_display_shipment_tracking' ) );
 		
@@ -32,8 +32,16 @@ class Knawat_Dropshipping_Woocommerce_Shipment_Traking {
 	 *
 	 * @since    1.1.0
 	 */
-	public function knawat_dropshipwc_add_meta_box(){
-		add_meta_box( 'knawat-shipment-tracking', __( 'Knawat Shipment Tracking', 'dropshipping-woocommerce' ), array( $this, 'knawat_dropshipwc_meta_box' ), 'shop_order', 'side', 'high' );
+	public function knawat_dropshipwc_add_meta_box( $post_type, $post ){
+		$order_id = $post->ID;
+		if( empty( $order_id ) ){
+			return;
+		}
+		$tracking_data = $this->knawat_dropshipwc_get_tracking_details( $order_id );
+		$is_shipment_data = ( $tracking_data['_shipment_provider_name'] != '' && $tracking_data['_shipment_tracking_number'] );
+		if( $is_shipment_data ){
+			add_meta_box( 'knawat-shipment-tracking', __( 'Knawat Shipment Tracking', 'dropshipping-woocommerce' ), array( $this, 'knawat_dropshipwc_meta_box' ), 'shop_order', 'side', 'high' );
+		}
 	}
 
 	/**
@@ -69,10 +77,12 @@ class Knawat_Dropshipping_Woocommerce_Shipment_Traking {
 						<a href="<?php echo esc_url( $tracking_data['_shipment_tracking_link'] ); ?>" target="_blank"><?php _e( 'Track', 'dropshipping-woocommerce' ); ?></a>
 					</p>
 					<?php } ?>
+					<?php if( $tracking_data['_shipment_date_shipped'] != '' ){ ?>
 					<p>
 						<strong><?php _e( 'Date shipped:', 'dropshipping-woocommerce' ); ?></strong><br/>
 						<span><?php echo $tracking_data['_shipment_date_shipped']; ?></span>
 					</p>
+					<?php } ?>
 				</div>
 			<?php } ?>
 			<div class="knawat-shipment-edit" <?php if( $is_shipment_data ) { echo 'style="display: none;"'; } ?>">
