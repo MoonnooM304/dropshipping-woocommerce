@@ -55,6 +55,29 @@ class Knawat_Dropshipping_Woocommerce_Common {
 			return false;
 		}
 	}
+
+	/**
+	 * Check order contains knawat products or not.
+	 *
+	 * @since    1.0.0
+	 * @return 	 boolean
+	 */
+	public function is_knawat_order( $order_id ) {
+		if( empty( $order_id ) ){ return false; }
+
+		$order = wc_get_order( $order_id );
+		$items = $order->get_items();
+		foreach ( $items as $item ) {
+			if ( is_a( $item, 'WC_Order_Item_Product' ) ) {
+				$product_id = $item->get_product_id();
+				$dropshipping = get_post_meta( $product_id, 'dropshipping', true );
+				if( $dropshipping == 'knawat' ){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }
 
 /*

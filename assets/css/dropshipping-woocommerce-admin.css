@@ -1,0 +1,26 @@
+.knawat-shipment-wrap a.edit_shipment_traking{
+	width: 20px;
+	height: 0px;
+	padding: 20px 0px 0px;
+	margin: 0px;
+	overflow: hidden;
+	position: relative;
+	color: rgb(153, 153, 153);
+	border: 0px none;
+	float: right;
+}
+.knawat-shipment-wrap a.edit_shipment_traking:hover{
+	color: #000000;
+}
+.knawat-shipment-wrap a.edit_shipment_traking::after {
+    font-family: Dashicons;
+    content: '\f464';
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    vertical-align: top;
+    line-height: 20px;
+    font-size: 20px;
+    font-weight: 400;
+}

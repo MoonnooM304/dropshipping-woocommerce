@@ -149,7 +149,9 @@ class Knawat_Dropshipping_Woocommerce{
 		require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-admin.php';
 		require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-webhook.php';
 		require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-pdf-invoice.php';
-		
+		if( $this->is_woocommerce_activated() ){
+			require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-shipment-tracking.php';
+		}
 		/**
 		 * Recommended and required plugins.
 		 */
@@ -189,6 +191,24 @@ class Knawat_Dropshipping_Woocommerce{
 	
 	}
 	
+	/**
+	 * Check if woocommerce is activated
+	 *
+	 * @access public
+	 * @since 1.0.0
+	 * @return void
+	 */
+	public function is_woocommerce_activated() {
+		$blog_plugins = get_option( 'active_plugins', array() );
+		$site_plugins = is_multisite() ? (array) maybe_unserialize( get_site_option('active_sitewide_plugins' ) ) : array();
+
+		if ( in_array( 'woocommerce/woocommerce.php', $blog_plugins ) || isset( $site_plugins['woocommerce/woocommerce.php'] ) ) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	/**
 	 * enqueue style front-end
 	 * 

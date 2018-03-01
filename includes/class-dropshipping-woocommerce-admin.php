@@ -32,12 +32,15 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		$this->adminpage_url = admin_url('admin.php?page=knawat_dropship' );
 
 		add_action( 'admin_menu', array( $this, 'add_menu_pages') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_scripts') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_admin_styles') );
 		add_action( 'after_setup_theme', array( $this, 'knawat_setup_wizard' ) );
 		add_filter( 'views_edit-product', array( $this, 'knawat_dropshipwc_add_new_product_filter' ) );
 		add_filter( 'views_edit-shop_order', array( $this, 'knawat_dropshipwc_add_new_order_filter' ) );
 		add_action( 'load-edit.php', array( $this, 'knawat_dropshipwc_load_custom_knawat_filter' ) );
 		add_action( 'load-edit.php', array( $this, 'knawat_dropshipwc_load_custom_knawat_order_filter' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_dropshipping_woocommerce_credit' ) );
+		add_action( 'woocommerce_admin_order_data_after_order_details', array( $this, 'knawat_dropshipwc_add_knawat_order_status_in_backend' ), 10 );
 	}
 
 	/**
@@ -256,6 +259,64 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 			);
 		}
 		return $footer_text;
+	}
+
+	/**
+	 * Load Admin Scripts
+	 *
+	 * Enqueues the required admin scripts.
+	 *
+	 * @since 1.1.0
+	 * @param string $hook Page hook
+	 * @return void
+	 */
+	public function enqueue_admin_scripts( $hook ) {
+		$js_dir  = KNAWAT_DROPWC_PLUGIN_URL . 'assets/js/';
+		wp_register_script( 'dropshipping-woocommerce', $js_dir . 'dropshipping-woocommerce-admin.js', array('jquery' ), KNAWAT_DROPWC_VERSION );
+		wp_enqueue_script( 'dropshipping-woocommerce' );
+		
+	}
+	
+	/**
+	 * Load Admin Styles.
+	 *
+	 * Enqueues the required admin styles.
+	 *
+	 * @since 1.1.0
+	 * @param string $hook Page hook
+	 * @return void
+	 */
+	public function enqueue_admin_styles( $hook ) {
+		$css_dir  = KNAWAT_DROPWC_PLUGIN_URL . 'assets/css/';
+		wp_enqueue_style('dropshipping-woocommerce', $css_dir . 'dropshipping-woocommerce-admin.css', false, "" );
+	}
+
+	/**
+	 * Display Knawat Order Status in Order Meta Box
+	 *
+	 * @since 1.1.0
+	 * @param object $order Order
+	 * @return void
+	 */
+	public function knawat_dropshipwc_add_knawat_order_status_in_backend( $order ){
+		global $knawat_dropshipwc;
+		$order_id = $order->get_id();
+		if( !$knawat_dropshipwc->common->is_knawat_order( $order_id ) ){
+			return;
+		}
+		if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+			$knawat_order_status = get_post_meta( $order_id, '_knawat_order_status', true );
+		} else {
+			$knawat_order_status = $order->get_meta( '_knawat_order_status', true );
+		}
+		if( $knawat_order_status != '' ){
+			?>
+			<p class="form-field" style="color: #000">
+				<strong><?php _e( 'Knawat Order Status:', 'dropshipping-woocommerce' ); ?></strong><br/>
+				<span><?php echo ucfirst( $knawat_order_status ); ?></span>
+			</p>
+			<?php
+		}		
 	}
 
 }
