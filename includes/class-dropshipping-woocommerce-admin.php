@@ -41,6 +41,10 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		add_action( 'load-edit.php', array( $this, 'knawat_dropshipwc_load_custom_knawat_order_filter' ) );
 		add_filter( 'admin_footer_text', array( $this, 'add_dropshipping_woocommerce_credit' ) );
 		add_action( 'woocommerce_admin_order_data_after_order_details', array( $this, 'knawat_dropshipwc_add_knawat_order_status_in_backend' ), 10 );
+
+		// Add Knawat Order Status column to order list table
+		add_filter( 'manage_shop_order_posts_columns', array( $this, 'knawat_dropshipwc_shop_order_columns' ), 20 );
+		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'knawat_dropshipwc_render_shop_order_columns' ) );
 	}
 
 	/**
@@ -317,6 +321,46 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 			</p>
 			<?php
 		}		
+	}
+
+	/**
+	 * Define Knawat Order Status column in admin orders list.
+	 *
+	 * @since 1.1.0
+	 * @param 	array $columns Existing columns
+	 * @return 	array modilfied columns
+	 */
+	public function knawat_dropshipwc_shop_order_columns( $columns ){
+		$columns['knawat_status'] = __( 'Knawat Status', 'dropshipping-woocommerce' );
+		return $columns;
+	}
+
+
+	/**
+	 * Render Knawat Order Status in custom column
+	 *
+	 * @since 1.1.0
+	 * @param 	string $column Current column
+	 */
+	public function knawat_dropshipwc_render_shop_order_columns( $column ){
+		global $post;
+		if ( 'knawat_status' === $column ) {
+			$order_id = $post->ID;
+			if ( version_compare( WC_VERSION, '3.0', '<' ) ) {
+				$knawat_order_status = get_post_meta( $order_id, '_knawat_order_status', true );
+			} else {
+				$order = new WC_Order( $order_id );
+				$knawat_order_status = $order->get_meta( '_knawat_order_status', true );
+			}
+
+			if( $knawat_order_status != '' ){
+				?>
+				<mark class="order-status"><span><?php echo ucfirst( $knawat_order_status ); ?></span></mark>
+				<?php
+			}else{
+				echo '–';
+			}
+		}
 	}
 
 }
