@@ -1,7 +1,7 @@
 <p align="center"><a href="https://knawat.com/"><img src="https://knawat.com/wp-content/uploads/2017/10/253_77.png" alt="Knawat"></a></p>
 
 ## Description
-Welcome to the Knawat WordPress Plugin repository on GitHub. Here you can browse the source, look at open issues and keep track of development. 
+Welcome to the Knawat WooCommerce DropShipping Plugin repository on GitHub. Here you can browse the source, look at open issues and keep track of development. 
 
 If you are not a developer, please use the [Knawat plugin page](https://wordpress.org/plugins/dropshipping-woocommerce/) on WordPress.org.
 
