@@ -21,7 +21,7 @@ class Knawat_Dropshipping_Woocommerce_Shipment_Traking {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'knawat_dropshipwc_register_order_meta' ) );
-		add_action( 'add_meta_boxes', array( $this, 'knawat_dropshipwc_add_meta_box' ), 10, 2 );
+		add_action( 'add_meta_boxes_shop_order', array( $this, 'knawat_dropshipwc_add_meta_box' ), 10 );
 		add_action( 'woocommerce_process_shop_order_meta', array( $this, 'knawat_dropshipwc_save_tracking_details' ), 0, 2 );
 		add_action( 'woocommerce_view_order', array( $this, 'knawat_dropshipwc_display_shipment_tracking' ) );
 		
@@ -32,7 +32,7 @@ class Knawat_Dropshipping_Woocommerce_Shipment_Traking {
 	 *
 	 * @since    1.1.0
 	 */
-	public function knawat_dropshipwc_add_meta_box( $post_type, $post ){
+	public function knawat_dropshipwc_add_meta_box( $post ){
 		$order_id = $post->ID;
 		if( empty( $order_id ) ){
 			return;
@@ -224,6 +224,7 @@ class Knawat_Dropshipping_Woocommerce_Shipment_Traking {
 	 *
 	 */
 	public function knawat_dropshipwc_display_shipment_tracking( $order_id ) {
+
 		$tracking_data = $this->knawat_dropshipwc_get_tracking_details( $order_id );
 		if( $tracking_data['_shipment_tracking_number'] != '' && $tracking_data['_shipment_provider_name'] != '' ){
 			wc_get_template( 'myaccount/shipment-tracking.php', array( 'tracking_data' => $tracking_data ), 'dropshipping-woocommerce/', KNAWAT_DROPWC_PLUGIN_DIR . '/templates/' );	
