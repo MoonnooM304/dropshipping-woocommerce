@@ -1,11 +1,11 @@
-# Copyright (C) 2018 Knawat Dropshipping
-# This file is distributed under the same license as the Knawat Dropshipping package.
+# Copyright (C) 2018 Knawat WooCommerce DropShipping
+# This file is distributed under the same license as the Knawat WooCommerce DropShipping package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Knawat Dropshipping 1.0.0\n"
+"Project-Id-Version: Knawat WooCommerce DropShipping 1.0.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/dropshipping-"
 "woocommerce\n"
-"POT-Creation-Date: 2018-02-13 05:48:59+00:00\n"
+"POT-Creation-Date: 2018-03-06 05:10:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -17,31 +17,37 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#. #-#-#-#-#  dropshipping-woocommerce.pot (Knawat Dropshipping 1.0.0)  #-#-#-#-#
-#. Plugin Name of the plugin/theme
-#: includes/class-dropshipping-woocommerce-admin.php:51
-#: includes/class-dropshipping-woocommerce-admin.php:74
+#: includes/class-dropshipping-woocommerce-admin.php:58
+#: includes/class-dropshipping-woocommerce-admin.php:81
 msgid "Knawat Dropshipping"
 msgstr ""
 
-#: includes/class-dropshipping-woocommerce-admin.php:51
+#: includes/class-dropshipping-woocommerce-admin.php:58
 msgid "Dropshipping"
 msgstr ""
 
-#: includes/class-dropshipping-woocommerce-admin.php:75
+#: includes/class-dropshipping-woocommerce-admin.php:82
 msgid "Settings"
 msgstr ""
 
-#: includes/class-dropshipping-woocommerce-admin.php:133
+#: includes/class-dropshipping-woocommerce-admin.php:140
 msgid "Knawat Orders"
 msgstr ""
 
-#: includes/class-dropshipping-woocommerce-admin.php:203
+#: includes/class-dropshipping-woocommerce-admin.php:208
 msgid "Knawat Products"
 msgstr ""
 
-#: includes/class-dropshipping-woocommerce-admin.php:254
+#: includes/class-dropshipping-woocommerce-admin.php:259
 msgid " Rate %1$s Dropshipping Woocommerce%2$s %3$s"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-admin.php:319
+msgid "Knawat Order Status:"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-admin.php:334
+msgid "Knawat Status"
 msgstr ""
 
 #: includes/class-dropshipping-woocommerce-pdf-invoice.php:46
@@ -58,6 +64,50 @@ msgstr ""
 
 #: includes/class-dropshipping-woocommerce-pdf-invoice.php:75
 msgid "Invoice for the selected order(s) could not be generated"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:43
+msgid "Knawat Shipment Tracking"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:65
+msgid "Edit"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:67
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:92
+msgid "Provider Name:"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:71
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:99
+msgid "Tracking number:"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:76
+msgid "Tracking Link:"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:77
+#: templates/myaccount/shipment-tracking.php:45
+msgid "Track"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:82
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:113
+msgid "Date shipped:"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:106
+msgid "Tracking link:"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:114
+msgid "Y-m-d"
+msgstr ""
+
+#: includes/class-dropshipping-woocommerce-shipment-tracking.php:119
+msgid "Save Tracking"
 msgstr ""
 
 #: includes/class-dropshipping-woocommerce-webhook.php:88
@@ -676,12 +726,34 @@ msgstr ""
 msgid "Connect"
 msgstr ""
 
-#. Plugin URI of the plugin/theme
-msgid "https://wordpress.org/plugins/dropshipping-woocommerce/"
+#: templates/myaccount/shipment-tracking.php:11
+msgid "Tracking Information"
 msgstr ""
 
+#: templates/myaccount/shipment-tracking.php:17
+#: templates/myaccount/shipment-tracking.php:30
+msgid "Provider"
+msgstr ""
+
+#: templates/myaccount/shipment-tracking.php:20
+#: templates/myaccount/shipment-tracking.php:33
+msgid "Tracking Number"
+msgstr ""
+
+#: templates/myaccount/shipment-tracking.php:23
+#: templates/myaccount/shipment-tracking.php:36
+msgid "Date"
+msgstr ""
+
+#. #-#-#-#-#  dropshipping-woocommerce.pot (Knawat WooCommerce DropShipping 1.0.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#. #-#-#-#-#  dropshipping-woocommerce.pot (Knawat WooCommerce DropShipping 1.0.0)  #-#-#-#-#
 #. Description of the plugin/theme
-msgid "Knawat Dropshipping Woocommerce."
+msgid "Knawat WooCommerce DropShipping"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://wordpress.org/plugins/dropshipping-woocommerce/"
 msgstr ""
 
 #. Author of the plugin/theme
