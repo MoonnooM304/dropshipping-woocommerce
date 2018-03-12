@@ -45,6 +45,9 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		// Add Knawat Order Status column to order list table
 		add_filter( 'manage_shop_order_posts_columns', array( $this, 'knawat_dropshipwc_shop_order_columns' ), 20 );
 		add_action( 'manage_shop_order_posts_custom_column', array( $this, 'knawat_dropshipwc_render_shop_order_columns' ) );
+
+		// Display Knawat Cost in Variation
+		add_action( 'woocommerce_variation_options_pricing', array( $this, 'knawat_dropshipwc_add_knawat_cost_field' ), 10, 3 );
 	}
 
 	/**
@@ -360,6 +363,28 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 			}else{
 				echo '–';
 			}
+		}
+	}
+
+
+	/**
+	 * Render Read-Only Knawat Cost in Variation Prices block
+	 *
+	 * @since 1.2.0
+	 *
+	 * @param int     $loop
+	 * @param array   $variation_data
+	 * @param WP_Post $variation
+	 */
+	public function knawat_dropshipwc_add_knawat_cost_field( $loop, $variation_data, $variation ){
+		$knawat_cost = get_post_meta( $variation->ID, '_knawat_cost', true );
+		if( !empty( $knawat_cost ) ){
+			?>
+			<p class="form-field knawat_dropshipwc_knawat_cost form-row form-row-first">
+				<label for="knawat_cost<?php echo $loop; ?>"><strong><?php _e('Knawat Cost', 'dropshipping-woocommerce') ?></strong></label>
+				<input class="short knawat_cost" id="knawat_cost<?php echo $loop; ?>" value="<?php echo $knawat_cost; ?>" placeholder="<?php _e('Knawat Cost', 'dropshipping-woocommerce') ?>" type="text" disabled="disabled">
+			</p>
+			<?php
 		}
 	}
 
