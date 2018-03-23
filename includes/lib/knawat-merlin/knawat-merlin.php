@@ -625,6 +625,7 @@ class Knawat_Merlin {
 		if( isset( $knawat_options['knawat_status'] ) && $knawat_options['knawat_status'] != '' && $knawat_options['knawat_status'] == 'connected' ) {
 			$already_setup = 1;
 		}*/
+		$already_setup = 0;
 		if( knawat_dropshipwc_is_connected() ){
 			$already_setup = 1;	
 		}

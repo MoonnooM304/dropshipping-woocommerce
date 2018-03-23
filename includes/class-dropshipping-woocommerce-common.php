@@ -93,15 +93,16 @@ add_filter( 'http_request_args', function( $args ) {
  * Store is contected to knawat.com or not
  */
 function knawat_dropshipwc_is_connected(){
-	global $wpdb;
+	global $wpdb, $knawat_dropshipwc;
 
-	$t_api_keys = $wpdb->prefix.'woocommerce_api_keys';
-
-	$api_key_query = "SELECT COUNT( key_id ) as count FROM {$t_api_keys} WHERE `description` LIKE '%Knawat - API%'";
-	$key_count = $wpdb->get_var( $api_key_query );
-
-	if( $key_count > 0 ){
-		return true;
+	if( $knawat_dropshipwc->is_woocommerce_activated() ){
+		$t_api_keys = $wpdb->prefix.'woocommerce_api_keys';
+		$api_key_query = "SELECT COUNT( key_id ) as count FROM {$t_api_keys} WHERE `description` LIKE '%Knawat - API%'";
+		$key_count = $wpdb->get_var( $api_key_query );
+		if( $key_count > 0 ){
+			return true;
+		}
 	}
+
 	return false;
 }
