@@ -52,8 +52,6 @@ class Knawat_Dropshipping_Woocommerce{
 
 			add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 			add_action( 'init', array( self::$instance, 'init_includes' ) );
-			add_action( 'wp_enqueue_scripts', array( self::$instance, 'knawat_dropshipwc_enqueue_style' ) );
-			add_action( 'wp_enqueue_scripts', array( self::$instance, 'knawat_dropshipwc_enqueue_script' ) );
 
 			self::$instance->includes();
 			self::$instance->common = new Knawat_Dropshipping_Woocommerce_Common();
@@ -207,30 +205,6 @@ class Knawat_Dropshipping_Woocommerce{
 		} else {
 			return false;
 		}
-	}
-
-	/**
-	 * enqueue style front-end
-	 * 
-	 * @access public
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function knawat_dropshipwc_enqueue_style() {
-		// enqueue style here.
-		$css_dir = KNAWAT_DROPWC_PLUGIN_URL . 'assets/css/';
-	 	wp_enqueue_style('dropshipping-woocommerce-front', $css_dir . 'dropshipping-woocommerce.css', false, "" );		
-	}
-
-	/**
-	 * enqueue script front-end
-	 * 
-	 * @access public
-	 * @since 1.0.0
-	 * @return void
-	 */
-	public function knawat_dropshipwc_enqueue_script() {
-		// enqueue script here.
 	}
 
 }
