@@ -667,8 +667,7 @@ class Knawat_Dropshipping_Woocommerce_Orders {
      * @return object $counts Modified post counts by status.
 	 */
     public function knawat_dropshipwc_filter_count_orders( $counts, $type, $perm ) {
-        
-        if( 'shop_order' === $type && is_admin() && 'edit-shop_order' === get_current_screen()->id ){
+        if( 'shop_order' === $type && is_admin() && ( 'edit-shop_order' === get_current_screen()->id || 'dashboard' === get_current_screen()->id ) ){
             global $wpdb;
             
             if ( ! post_type_exists( $type ) )
@@ -832,7 +831,7 @@ class Knawat_Dropshipping_Woocommerce_Orders {
     }
 
     /**
-     * Delete sub orders and from dokan sync table when a order is deleted
+     * Delete sub orders and when parent order is deleted
      *
      * @param int $post_id
      */
