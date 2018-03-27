@@ -56,6 +56,21 @@ class Knawat_Dropshipping_Woocommerce_Orders {
         add_action( 'wp_trash_post', array( $this, 'knawat_dropshipwc_trash_order' ) );
         add_action( 'wp_untrash_post', array( $this, 'knawat_dropshipwc_untrash_order' ) );
         add_action( 'delete_post', array( $this, 'knawat_dropshipwc_delete_order' ) );
+
+        /* Disabled Emails for suborders */
+        $email_ids = array(
+            'new_order',
+            'failed_order',
+            'cancelled_order',
+            'customer_refunded_order',
+            'customer_processing_order',
+            'customer_on_hold_order',
+            'customer_completed_order',
+        );
+
+        foreach( $email_ids as $email_id ){
+            add_filter( 'woocommerce_email_enabled_' . $email_id, array( $this, 'knawat_dropshipwc_disable_emails' ),10, 2 );
+        }
     }   
 
     /**
@@ -613,7 +628,6 @@ class Knawat_Dropshipping_Woocommerce_Orders {
                             wc_get_order_status_name( $suborder->get_status() )
                         );
 
-                    do_action( 'yith_wcmv_after_suborder_vendor_info', $suborder, $vendor );
                 }
                 break;
 
@@ -850,6 +864,24 @@ class Knawat_Dropshipping_Woocommerce_Orders {
         }
     }
 
+    /**
+     * Disable email for suborders.
+     *
+     * @param bool      $is_enabled     Email is enabled or not.
+     * @param object    $object         Object this email is for, for example a customer, product, or email.
+     *
+     * @return bool
+     */
+    public function knawat_dropshipwc_disable_emails( $is_enabled, $object ){
+        if( !empty( $object ) && is_a( $object, 'WC_Order' ) ){
+            $order_id = $object->get_id();
+            $parent_id = wp_get_post_parent_id( $order_id );
+            if( $parent_id > 0 ){
+                return false;
+            }
+        }
+        return $is_enabled;
+    }
 
 }
 
