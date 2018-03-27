@@ -57,6 +57,9 @@ class Knawat_Dropshipping_Woocommerce_Orders {
         add_action( 'wp_untrash_post', array( $this, 'knawat_dropshipwc_untrash_order' ) );
         add_action( 'delete_post', array( $this, 'knawat_dropshipwc_delete_order' ) );
 
+        /* Override customer orders' query */
+        add_filter( 'woocommerce_my_account_my_orders_query', array( $this, 'knawat_dropshipwc_get_customer_main_orders' ) );
+
         /* Disabled Emails for suborders */
         $email_ids = array(
             'new_order',
@@ -883,6 +886,17 @@ class Knawat_Dropshipping_Woocommerce_Orders {
         return $is_enabled;
     }
 
+    /**
+     * Override Customer Orders array
+     *
+     * @param array customer orders args query
+     *
+     * @return array modified customer orders args query
+     */
+    public function knawat_dropshipwc_get_customer_main_orders( $customer_orders ) {
+        $customer_orders['post_parent'] = 0;
+        return $customer_orders;
+    }
 }
 
 $knawat_dropshipwc_orders = new Knawat_Dropshipping_Woocommerce_Orders();
