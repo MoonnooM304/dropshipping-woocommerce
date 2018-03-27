@@ -151,6 +151,7 @@ class Knawat_Dropshipping_Woocommerce{
 		require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-pdf-invoice.php';
 		if( $this->is_woocommerce_activated() ){
 			require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-shipment-tracking.php';
+			require_once KNAWAT_DROPWC_PLUGIN_DIR . 'includes/class-dropshipping-woocommerce-orders.php';
 		}
 		/**
 		 * Recommended and required plugins.

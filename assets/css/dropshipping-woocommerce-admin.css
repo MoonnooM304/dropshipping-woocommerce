@@ -24,3 +24,17 @@
     font-size: 20px;
     font-weight: 400;
 }
+
+.kwd_suborder .kwd_suborder_item{
+    padding: 5px 0px;
+    margin: 10px 0px;
+}
+
+#knawat_dropshipwc-suborders .kwd_suborder_item{
+    padding: 5px 0px;
+    margin: 10px 0px;
+}
+
+#knawat_dropshipwc-suborders .kwd_suborder_item .order-status{
+    margin-left: 5px;
+}
