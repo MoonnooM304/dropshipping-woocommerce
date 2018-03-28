@@ -41,6 +41,7 @@ class Knawat_Dropshipping_Woocommerce_Orders {
 
         /* Count status for parent orders only */
         add_action( 'wp_count_posts', array( $this, 'knawat_dropshipwc_filter_count_orders' ), 10, 3 );
+        add_action( 'admin_head', array( $this, 'knawat_dropshipwc_count_processing_order' ), 5 );
 
         /* Order Status sync */
         add_action( 'woocommerce_order_status_changed', array( $this, 'knawat_dropshipwc_order_status_change' ), 10, 3 );
@@ -732,6 +733,38 @@ class Knawat_Dropshipping_Woocommerce_Orders {
             $counts = (object) $counts;
         }
         return $counts;
+    }
+
+    /**
+	 * Modify returned order counts by status
+	 *
+	 * @since 1.2.0
+	 *
+	 */
+    public function knawat_dropshipwc_count_processing_order() {
+        global $wpdb;
+
+        $count = 0;
+        $status = 'wc-processing';
+        $order_statuses = array_keys( wc_get_order_statuses() );
+        if ( ! in_array( $status, $order_statuses, true ) ) {
+            return 0;
+        }
+
+        $cache_key    = WC_Cache_Helper::get_cache_prefix( 'orders' ) . $status;
+        $cached_count = wp_cache_get( 'kwdcounts_' . $cache_key, 'kwdcounts' );
+        if ( $cached_count ) {
+            return;
+        }
+
+        foreach ( wc_get_order_types( 'order-count' ) as $type ) {
+            $data_store = WC_Data_Store::load( 'shop_order' === $type ? 'order' : $type );
+            if ( $data_store ) {
+                $count += absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT( * ) FROM {$wpdb->posts} WHERE post_type = 'shop_order' AND post_status = %s AND post_parent = 0", $status ) ) );
+            }
+        }
+        wp_cache_set( $cache_key, $count, 'counts' );
+        wp_cache_set( 'kwdcounts_' . $cache_key, true, 'kwdcounts' );
     }
 
     /**
