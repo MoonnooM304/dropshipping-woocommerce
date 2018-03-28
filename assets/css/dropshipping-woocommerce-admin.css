@@ -38,3 +38,21 @@
 #knawat_dropshipwc-suborders .kwd_suborder_item .order-status{
     margin-left: 5px;
 }
+
+.kwd_suborder_item.order_status{
+    width: auto !important;
+    text-align: left !important;
+}
+
+.kwd_suborder_item.order_status mark{
+    display: inline-block !important;
+    vertical-align: bottom;
+}
+
+.knawat-order-status{
+    background-color: #999;
+    padding: 5px 10px;
+    color: #fff;
+    border-radius: 5px;
+    text-align: left;
+}

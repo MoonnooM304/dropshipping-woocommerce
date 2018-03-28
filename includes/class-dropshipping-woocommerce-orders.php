@@ -514,10 +514,12 @@ class Knawat_Dropshipping_Woocommerce_Orders {
      * @return string           The label value
      */
     public function knawat_dropshipwc_shop_order_columns( $order_columns ) {
-        
 
-        //$order_number_col_name = YITH_Vendors()->is_wc_3_3_or_greather ? 'order_number' : 'order_title';
-        $order_number_col_name = 'order_number';
+        if ( version_compare( WC_VERSION, '3.3', '>=' ) ) {
+            $order_number_col_name = 'order_number';
+        }else{
+            $order_number_col_name = 'order_title';
+        }
         $suborder      = array( 'kwd_suborder' => _x( 'Suborders', 'Admin: Order table column', 'dropshipping-woocommerce' ) );
         $ref_pos       = array_search( $order_number_col_name, array_keys( $order_columns ) );
         $order_columns = array_slice( $order_columns, 0, $ref_pos + 1, true ) + $suborder + array_slice( $order_columns, $ref_pos + 1, count( $order_columns ) - 1, true );
@@ -546,15 +548,22 @@ class Knawat_Dropshipping_Woocommerce_Orders {
                         $suborder          = wc_get_order( $suborder_id );
                         $order_uri         = esc_url( 'post.php?post=' . absint( $suborder_id ) . '&action=edit' );
                         $order_status_name = wc_get_order_status_name( $suborder->get_status() );
-
-
-                        printf( '<div class="kwd_suborder_item"><strong><a href="%s">#%s</a></strong> <mark class="order-status status-%s"><span>%s</span></mark></div>',
-                            $order_uri,
-                            $suborder->get_order_number(),
-                            sanitize_title( $suborder->get_status() ),
-                            $order_status_name
-                        );
-
+                        if ( version_compare( WC_VERSION, '3.3', '>=' ) ) {
+                            printf( '<div class="kwd_suborder_item"><strong><a href="%s">#%s</a></strong> <mark class="order-status status-%s"><span>%s</span></mark></div>',
+                                $order_uri,
+                                $suborder->get_order_number(),
+                                sanitize_title( $suborder->get_status() ),
+                                $order_status_name
+                            );
+                        }else{
+                            printf( '<div class="kwd_suborder_item order_status column-order_status" style="display:block"><mark class="%s tips" data-tip="%s">%s</mark> <strong><a class="row-title" href="%s">#%s</a></strong></div>', 
+                                esc_attr( sanitize_html_class( $suborder->get_status() ) ),
+                                $order_status_name,
+                                $order_status_name,
+                                $order_uri,
+                                $suborder->get_order_number()
+                            );
+                        }
                     }
                 } else {
                     echo '<span>&ndash;</span>';
@@ -623,14 +632,24 @@ class Knawat_Dropshipping_Woocommerce_Orders {
                 foreach ( $suborder_ids as $suborder_id ) {
                     $suborder     = wc_get_order( absint( $suborder_id ) );
                     $suborder_uri = esc_url( 'post.php?post=' . absint( $suborder_id ) . '&action=edit' );
-                  
-                    printf( '<div class="kwd_suborder_item"><strong><a href="%s">#%s</a></strong> <mark class="order-status status-%s"><span>%s</span></mark></div>',
+                    if ( version_compare( WC_VERSION, '3.3', '>=' ) ) {
+                        printf( '<div class="kwd_suborder_item"><strong><a href="%s">#%s</a></strong> <mark class="order-status status-%s"><span>%s</span></mark></div>',
                             $suborder_uri,
                             $suborder->get_order_number(),
                             sanitize_title( $suborder->get_status() ),
                             wc_get_order_status_name( $suborder->get_status() )
                         );
-
+                    }else{
+                        echo '<div class="widefat">';
+                        printf( '<div class="kwd_suborder_item order_status column-order_status"><mark class="%s tips" data-tip="%s">%s</mark> <strong><a class="row-title" href="%s">#%s</a></strong></div>',
+                            esc_attr( sanitize_html_class( $suborder->get_status() ) ),
+                            esc_attr( wc_get_order_status_name( $suborder->get_status() ) ),
+                            esc_html( wc_get_order_status_name( $suborder->get_status() ) ),
+                            $suborder_uri,
+                            $suborder->get_order_number()
+                        );
+                        echo '</div>';
+                    }
                 }
                 break;
 

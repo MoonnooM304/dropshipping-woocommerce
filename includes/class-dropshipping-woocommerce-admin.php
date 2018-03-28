@@ -363,9 +363,15 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 			}
 
 			if( $knawat_order_status != '' ){
-				?>
-				<mark class="order-status"><span><?php echo ucfirst( $knawat_order_status ); ?></span></mark>
-				<?php
+				if ( version_compare( WC_VERSION, '3.3', '>=' ) ) {
+					?>
+					<mark class="order-status"><span><?php echo ucfirst( $knawat_order_status ); ?></span></mark>
+					<?php
+				}else{
+					?>
+					<span class="knawat-order-status"><?php echo ucfirst( $knawat_order_status ); ?></span>
+					<?php
+				}
 			}else{
 				echo '–';
 			}
