@@ -54,7 +54,7 @@ class Knawat_Dropshipping_Woocommerce_Orders {
 
         /* Order Trash, Untrash and Delete Operations. */
         add_action( 'wp_trash_post', array( $this, 'knawat_dropshipwc_trash_order' ) );
-        add_action( 'wp_untrash_post', array( $this, 'knawat_dropshipwc_untrash_order' ) );
+        add_action( 'untrash_post', array( $this, 'knawat_dropshipwc_untrash_order' ) );
         add_action( 'delete_post', array( $this, 'knawat_dropshipwc_delete_order' ) );
 
         /* Override customer orders' query */
