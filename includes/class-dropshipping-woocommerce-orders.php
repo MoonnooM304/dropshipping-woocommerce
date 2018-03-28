@@ -239,15 +239,22 @@ class Knawat_Dropshipping_Woocommerce_Orders {
                     'order_item_type' => 'tax'
                 ) );
 
+                /* $ship_tax = 0;
                 $splited_shipping = $splited_order->get_items( 'shipping' );
-                $splited_shipping = reset( $splited_shipping );
+                if( !empty( $splited_shipping ) ){
+                    foreach( $splited_shipping as $splited_ship ){
+                        $taxes = $splited_ship->get_taxes();
+                        $temptax = isset( $taxes['total'][$tax->get_rate_id()] ) ? $taxes['total'][$tax->get_rate_id()] : 0;
+                        $ship_tax += $temptax;
+                    }
+                } */
 
                 $tax_metas = array(
                     'rate_id'             => $tax->get_rate_id(),
                     'label'               => $tax->get_label(),
                     'compound'            => $tax->get_compound(),
                     'tax_amount'          => wc_format_decimal( array_sum( $items_tax[$tax->get_rate_id()] ) ),
-                    'shipping_tax_amount' => is_bool( $splited_shipping ) ? '' : $splited_shipping->get_total_tax()
+                    'shipping_tax_amount' => $shipping_tax
                 );
 
                 foreach( $tax_metas as $meta_key => $meta_value ) {
