@@ -653,8 +653,10 @@ class Knawat_Dropshipping_Woocommerce_Orders {
 	    global $typenow;
 	    if( 'shop_order' != $typenow ){
 	        return;
-	    }
-        add_filter( 'posts_where' , array( $this, 'knawat_dropshipwc_posts_where_orders') );
+        }
+        if ( !isset( $_GET[ 'knawat_orders' ] ) ){
+            add_filter( 'posts_where' , array( $this, 'knawat_dropshipwc_posts_where_orders') );
+        }
     }
     
     /**

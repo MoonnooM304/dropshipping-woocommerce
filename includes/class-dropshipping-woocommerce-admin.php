@@ -122,15 +122,11 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 		$t_order_items = $wpdb->prefix . "woocommerce_order_items";
 		$t_order_itemmeta = $wpdb->prefix . "woocommerce_order_itemmeta";
 
-		$count_query = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as count FROM {$wpdb->posts} WHERE 1=1 AND {$wpdb->posts}.post_type = 'shop_order'
+		$count_query = "SELECT COUNT( DISTINCT {$wpdb->posts}.ID ) as count FROM {$wpdb->posts}
+			INNER JOIN {$wpdb->postmeta} as pm ON {$wpdb->posts}.ID = pm.post_id AND pm.meta_key = '_knawat_order'
+			WHERE 1=1 AND {$wpdb->posts}.post_type = 'shop_order'
 			AND ( {$wpdb->posts}.post_status != 'wc-cancelled' AND {$wpdb->posts}.post_status != 'trash' )
-			AND {$wpdb->posts}.ID IN (
-				SELECT DISTINCT order_id from {$t_order_items} AS oi
-				INNER JOIN {$t_order_itemmeta} as oim ON oi.order_item_id = oim.order_item_id
-				WHERE oi.order_item_type = 'line_item'
-				AND oim.meta_key = '_product_id'
-				AND oim.meta_value IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='dropshipping' AND meta_value='knawat' )
-			)";
+			AND pm.meta_value = 1";
 
 		$count = $wpdb->get_var( $count_query );
 
@@ -142,6 +138,10 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 
 			$views_html = sprintf( "<a class='%s' href='edit.php?post_type=shop_order&knawat_orders=1'>%s</a><span class='count'>(%d)</span>", $class, __('Knawat Orders', 'dropshipping-woocommerce' ), $count );
 			$views['knawat'] = $views_html;
+		}
+		// Removed Mine filter from order listing screen.
+		if( isset( $views['mine'] ) ){
+			unset( $views['mine'] );
 		}
 		return $views;
 	}
@@ -160,6 +160,7 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 
 	    if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) && trim( $_GET[ 'knawat_orders' ] ) == 1 ){
 			add_filter( 'posts_where' , array( $this, 'knawat_dropshipwc_posts_where_knawat_orders') );
+			add_filter( 'posts_join', array( $this, 'knawat_dropshipwc_posts_join_knawat_orders') );
 	    }
 	}
 
@@ -173,21 +174,26 @@ class Knawat_Dropshipping_Woocommerce_Admin {
 	function knawat_dropshipwc_posts_where_knawat_orders( $where ){
 	    global $wpdb;
 
-	    $t_order_items = $wpdb->prefix . "woocommerce_order_items";
-		$t_order_itemmeta = $wpdb->prefix . "woocommerce_order_itemmeta";
+		if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) && trim( $_GET[ 'knawat_orders' ] ) == 1 ){
+	        $where .= " AND ( {$wpdb->posts}.post_status != 'wc-cancelled' AND {$wpdb->posts}.post_status != 'trash' ) AND {$wpdb->postmeta}.meta_value = 1 ";
+	    }
+	    return $where;
+	}
+
+	/**
+	 * Add JOIN statement for filter only knawat orders in orders list table
+	 *
+	 * @since  1.0
+	 * @param  string $join join of SQL statement for orders query
+	 * @return string $join Modified join of SQL statement for orders query
+	 */
+	function knawat_dropshipwc_posts_join_knawat_orders( $join ){
+	    global $wpdb;
 
 	    if ( isset( $_GET[ 'knawat_orders' ] ) && !empty( $_GET[ 'knawat_orders' ] ) && trim( $_GET[ 'knawat_orders' ] ) == 1 ){
-	        $where .= " AND (( {$wpdb->posts}.post_status != 'wc-cancelled'
-				AND {$wpdb->posts}.post_status != 'trash'))
-				AND ID IN (
-	        	SELECT DISTINCT order_id from {$t_order_items} AS oi
-				INNER JOIN {$t_order_itemmeta} as oim ON oi.order_item_id = oim.order_item_id
-				WHERE oi.order_item_type = 'line_item' 
-				AND oim.meta_key = '_product_id'
-				AND oim.meta_value IN ( SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='dropshipping' AND meta_value='knawat' )
-	        )";
+			$join .= "INNER JOIN {$wpdb->postmeta} ON {$wpdb->posts}.ID = {$wpdb->postmeta}.post_id AND {$wpdb->postmeta}.meta_key = '_knawat_order'";
 	    }
-	    return $where;	
+	    return $join;
 	}
 
 
